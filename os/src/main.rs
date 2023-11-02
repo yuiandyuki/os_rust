@@ -12,20 +12,35 @@ pub extern "C" fn _start() -> ! {
     println!("Hello World{}", "!");
 
     os::init();
-    x86_64::instructions::interrupts::int3();
+
+    // unsafe {
+    //     *(0xdeadbeef as *mut u8) = 42;
+    // };
+    // x86_64::instructions::interrupts::int3();
+
+    // fn stack_overflow(){
+    //     stack_overflow();
+    // }
+
+    // stack_overflow();
 
     #[cfg(test)]
     test_main();
 
     println!("It did not crash!");
-    loop {}
+    // loop {
+    //     use os::print;
+    //     print!("-");
+    // }
+    os::hlt_loop();
 }
 
 #[cfg(not(test))]
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
     println!("{}", info);
-    loop {}
+    // loop {}
+    os::hlt_loop();
 }
 
 #[cfg(test)]
